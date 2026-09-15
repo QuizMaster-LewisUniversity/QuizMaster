@@ -166,9 +166,9 @@ class QuizCreationService {
                 normalizedType = "FillInTheBlank";
             } else if (questionType === "MultipleAnswer") {
                 normalizedType = "MultipleAnswer";
-            } else if (questionType === "DragAndDrop") {
-                normalizedType = "DragAndDrop";
-            } else {
+            } //else if (questionType === "DragAndDrop") {
+                //normalizedType = "DragAndDrop";
+             else {
                 normalizedType = "Multiple";
             }
 
