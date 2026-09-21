@@ -6,9 +6,9 @@ We also plan on using our Discord server for consistent communication throughout
 
 The team uses an organized spreadsheet for management of the development of this project.
 
-### Recent Changes During Sprint 1
+### Recent Changes During Sprint 2
 
-Since we are just starting with Sprint 1, our main focus was getting back up to speed with how the system worked. We downsized from 3 people to 2 people so adjusting to that has been a priority. We felt like we needed to do something so we tried to do some code because we felt like if we didn't do some code we would be slacking almost.
+We made sure to mark our calenders with the date for midterm check-in, and recuriting the software engineering class. Got rid of drag and drop, updated the submite button to be at the bottom, got the multiple answers questions to work properly. Trying to fix bugs in the website. This week I'm dissappointed in myself because I didn't do nearly as much as I should've and could've (Coltin)
 
 ### Plans for CI/CD
 
