@@ -2,9 +2,9 @@ Scrum will be implemented by assigning the following roles: Product Owner, Scrum
 
 ### Fall 2026 Team Roles
 
-Michael Analitis - Product Owner
+Coltin Rogge - Product Owner
 
-Coltin Rogge - Scrum Master
+Michael Analitis - Scrum Master
 
 ### Spring 2026 Team Roles
 

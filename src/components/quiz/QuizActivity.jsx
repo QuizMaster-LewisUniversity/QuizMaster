@@ -277,7 +277,7 @@ function QuizActivity() {
                 </button>
               </div>
               <div className="space-y-3">
-              <button
+              {/*<button
                 onClick={() => {
                   setTimeout(handleSubmit, 200);
                 }}
@@ -300,8 +300,8 @@ function QuizActivity() {
                   'Quiz Completed!'
                 ) : (
                   'Submit Quiz'
-                )}
-              </button>
+                )} 
+              </button> */} 
               <button
                 onClick={async () => {
                   try {
@@ -464,6 +464,9 @@ function QuizActivity() {
           reviewQueue={reviewQueue}
           onNavigate={scrollToQuestion}
           onToggleReview={handleReviewToggle}
+          handleSubmit={handleSubmit}
+          completed={completed}
+          submittingResults={submittingResults}
         />
       )}
 

@@ -60,7 +60,7 @@ export default function QuestionCreationForm({
               <option value={QUESTION_TYPES.TRUE_FALSE}>True/False</option>
               <option value={QUESTION_TYPES.FILL_IN_BLANK}>Fill in the Blank</option>
               <option value={QUESTION_TYPES.MULTIPLE_ANSWER}>Multiple Answer</option>
-              <option value={QUESTION_TYPES.DRAG_AND_DROP}>Drag and Drop</option>
+              {/* <option value={QUESTION_TYPES.DRAG_AND_DROP}>Drag and Drop</option> I have this commented out so that it's not available in the dropdown */}
             </select>
           </div>
         </div>

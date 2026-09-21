@@ -424,7 +424,7 @@ function CustomQuizActivity() {
                     Go to next review question
                   </button>
                 </div>
-                <button
+                {/*<button
                   onClick={handleSubmit}
                   className={`w-full px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg border flex items-center justify-center gap-2 ${
                     completed || submittingResults
@@ -446,7 +446,7 @@ function CustomQuizActivity() {
                   ) : (
                     'Submit Quiz'
                   )}
-                </button>
+                </button> */} 
               </div>
             </div>
 
@@ -575,6 +575,9 @@ function CustomQuizActivity() {
           reviewQueue={reviewQueue}
           onNavigate={scrollToQuestion}
           onToggleReview={handleReviewToggle}
+          handleSubmit={handleSubmit}
+          completed={completed}
+          submittingResults={submittingResults}
         />
       )}
 
