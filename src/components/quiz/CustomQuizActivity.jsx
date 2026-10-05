@@ -326,7 +326,7 @@ function CustomQuizActivity() {
                 <h2 className="text-2xl font-semibold mb-4 text-center text-gradient-primary">
                   Quiz Settings
                 </h2>
-                <div className="mb-4">
+                {/*<div className="mb-4">
                   <label className="block text-base mb-2 text-secondary">
                     Answers per question:
                   </label>
@@ -361,7 +361,7 @@ function CustomQuizActivity() {
                       />
                     </div>
                   </label>
-                  <label className={`flex items-center justify-between ${shuffleLocked ? 'opacity-50' : 'cursor-pointer'}`}>
+                  {/*<label className={`flex items-center justify-between ${shuffleLocked ? 'opacity-50' : 'cursor-pointer'}`}>
                     <span className="text-base text-secondary">Shuffle answers</span>
                     <div
                       onClick={() => !shuffleLocked && setShuffleAnswers(!shuffleAnswers)}
@@ -380,17 +380,17 @@ function CustomQuizActivity() {
                     <p className="text-xs text-secondary italic">
                       Shuffle locked once you start answering.
                     </p>
-                  )}
-                </div>
+                  )} */}
+                </div> 
 
-                <button
+                {/*<button
                   onClick={() => setHelpActive(true)}
                   className="w-full px-6 py-2 bg-accent hover:bg-accent-hover text-btn-primary rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg border border-accent"
                   disabled={completed}
                 >
                   Help
-                </button>
-              </div>
+                </button> */}
+              </div> 
 
               <div className="bg-card rounded-2xl p-6 shadow-xl border border-accent">
                 <h2 className="text-2xl font-semibold mb-4 text-center text-gradient-primary">

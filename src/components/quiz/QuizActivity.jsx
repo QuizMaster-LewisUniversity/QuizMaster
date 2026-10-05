@@ -214,7 +214,7 @@ function QuizActivity() {
               />
             </div>
             {/* Settings */}
-            <div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
+            {/*<div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
               <h2 className="text-2xl font-semibold mb-6 text-center text-gradient-primary">
                 Quiz Settings
               </h2>
@@ -242,7 +242,7 @@ function QuizActivity() {
               >
                 Help
               </button>
-            </div>
+            </div>*/}
             {/* Progress + Submit */}
             <div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
               <h2 className="text-2xl font-semibold mb-6 text-center text-gradient-primary">

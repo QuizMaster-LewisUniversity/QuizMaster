@@ -88,7 +88,7 @@ function Question({
           .map((a) => a.trim().toLowerCase());
 
         const selectedTexts = selectedIndexes.map((i) =>
-          question.choices[i]?.trim().toLowerCase()
+          question.choices[i]?.toLowerCase()
         );
 
         isCorrect =
