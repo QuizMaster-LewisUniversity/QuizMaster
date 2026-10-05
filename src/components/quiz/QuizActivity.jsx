@@ -82,10 +82,13 @@ function QuizActivity() {
   const handleAnswerResult = (index, isCorrect) => {
     if (typeof index !== 'number') return;
 
-    setResultsByIndex((prev) => ({
-      ...prev,
-      [index]: isCorrect
-    }));
+    setResultsByIndex((prev) => {
+      if (prev[index] === isCorrect) return prev; 
+      return {
+        ...prev,
+        [index]: isCorrect
+      };
+    });
 
     if (typeof isCorrect === 'boolean') {
       recordCorrect(isCorrect);
@@ -347,6 +350,7 @@ function QuizActivity() {
                 data-question-index={i}
               >
                 <Question
+                  key={q.id || q.questionId || i}
                   question={q}
                   questionIndex={i}
                   isCompleted={completed}
