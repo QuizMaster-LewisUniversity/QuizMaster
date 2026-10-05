@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import AuthService from '../../services/auth/authService';
-import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, deleteUser, getAuth } from 'firebase/auth';
 import {
   changeUsername,
   isUsernameAvailable,
@@ -188,17 +188,29 @@ const ProfileInfo = ({ profile, userId }) => {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmation = window.confirm('Are you sure that you want to delete your account? This action is permanent');
+    const confirmation = window.confirm('Are you sure that you want to delete your account? This is permanent');
     if (!confirmation) return;
 
     try {
-      await AuthService.deleteUserAccount(userId);
-      alert('Your account has been deleted successfully.');
+    await AuthService.deleteUserAccount(userId);
 
-      window.location.href = '/';
-    } catch (err) {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      await deleteUser(currentUser);
+    }
+
+    alert('Your account has been deleted successfully.');
+    window.location.href = '/signin';
+  } catch (err) {
+    console.error('Account deletion failed:', err);
+
+    if (err.code === 'auth/requires-recent-login') {
+      alert('For security reasons, please sign out and sign back in before deleting your account.');
+    } else {
       alert('Failed to delete account: ' + (err.message || 'Unknown error'));
     }
+  }
   }
 
   const handleCancel = () => {
