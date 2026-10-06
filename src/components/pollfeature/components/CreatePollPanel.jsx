@@ -38,6 +38,8 @@ onClose,
 onOpen,
 onToggleLive,
 poll,
+votes,
+totalVotes,
 joinCode,
 isCreating,
 error,
@@ -67,6 +69,14 @@ return (
         {poll?.status ? poll.status.toUpperCase() : "IDLE"}
     </span>
     </div>
+	<div className="flex items-center justify-between gap-2">
+	<div></div>
+	{poll?.status &&
+		<span className="text-xs px-3 py-1 rounded-full bg-accent/10 text-accent font-semibold">
+        {`VOTES: ${totalVotes}`}
+        </span>
+	}
+	</div>
     <p className="text-secondary mt-2 leading-relaxed">
     Create a poll, share the join code, and manage visibility.
     <br />
@@ -86,24 +96,50 @@ return (
     />
 
     <div className="space-y-2">
-        {options.map((opt, idx) => (
-        <div key={idx} className="flex items-center gap-2">
-            <input
-            value={opt}
-            onChange={(e) => handleOptionChange(e.target.value, idx)}
-            className="flex-1 px-4 py-2 rounded-xl border border-input bg-input text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-            placeholder={`Option ${idx + 1}`}
-            />
-            {options.length > 2 && (
-            <button
-                onClick={() => removeOption(idx)}
-                className="text-xs px-3 py-2 rounded-full border border-primary text-secondary hover:text-accent transition"
-            >
-                Remove
-            </button>
-            )}
-        </div>
-        ))}
+        {options.map((opt, idx) => {
+		const voteCount = votes[idx] || 0;
+		const votePercent = totalVotes
+            ? Math.round((voteCount / totalVotes) * 100)
+            : 0;
+		return(
+		<div className="mt-4">
+			{poll?.status && (
+				<hr className="mt-4 mb-4 border border-input" />
+			)}
+			<div key={idx} className="flex items-center gap-2">
+				<input
+				value={opt}
+				onChange={(e) => handleOptionChange(e.target.value, idx)}
+				className="flex-1 px-4 py-2 rounded-xl border border-input bg-input text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+				placeholder={`Option ${idx + 1}`}
+				/>
+				{options.length > 2 && (
+				<button
+					onClick={() => removeOption(idx)}
+					className="text-xs px-3 py-2 rounded-full border border-primary text-secondary hover:text-accent transition"
+				>
+					Remove
+				</button>
+				)}
+			</div>
+			{poll?.status && (
+			<div className="mt-4">
+				<div className="mb-2 flex items-center justify-between gap-3 text-sm font-semibold">
+				<span className="text-secondary">
+					{voteCount} vote{voteCount === 1 ? "" : "s"}
+				</span>
+				<span className="shrink-0 text-accent">{votePercent}%</span>
+				</div>
+				<div className="h-2.5 overflow-hidden rounded-full border border-primary bg-primary/50">
+				<div
+					className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300"
+					style={{ width: `${votePercent}%` }}
+				/>
+				</div>
+			</div>
+			)}
+		</div> 
+        )})}
     </div>
 
     <div className="flex flex-wrap items-center gap-3">

@@ -28,9 +28,9 @@ When a new user comes to our product, we plan on having clear instruction on how
 
 ### Definition of Done
 
-Here is our definition of done.
+    Here is our definition of done.
 
-- Merged from development to production
-- Can be demoed
-- Everyone agrees that it meets story's expectations
-- At least one GitHub commit to the product branch with a commit message "'Story Number' done".
+    - Merged from development to production
+    - Can be demoed
+    - Everyone agrees that it meets story's expectations
+    - At least one GitHub commit to the product branch with a commit message "'Story Number' done".

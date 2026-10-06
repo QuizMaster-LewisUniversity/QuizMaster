@@ -12,38 +12,41 @@ function Question({
   savedAnswer,
   isMarkedForReview = false
 }) {
-  const [selectedIndex, setSelectedIndex] = useState(() => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndexes, setSelectedIndexes] = useState([]);
+  const [inputAnswer, setInputAnswer] = useState('');
+  const [droppedOption, setDroppedOption] = useState('');
+  const [hasBeenCounted, setHasBeenCounted] = useState(false);
+
+  // Keep state in sync with saved answers without re-initializing on render
+  useEffect(() => {
     if (savedAnswer && question.choices && typeof savedAnswer === 'string') {
-      const idx = question.choices.findIndex(c => c === savedAnswer);
-      return idx >= 0 ? idx : null;
+      const idx = question.choices.findIndex((c) => c === savedAnswer);
+      setSelectedIndex(idx >= 0 ? idx : null);
+    } else {
+      setSelectedIndex(null);
     }
-    return null;
-  });
 
-  const [selectedIndexes, setSelectedIndexes] = useState(() => {
     if (Array.isArray(savedAnswer) && question.choices) {
-      return savedAnswer
-        .map(ans => question.choices.findIndex(c => c === ans))
-        .filter(i => i >= 0);
+      setSelectedIndexes(
+        savedAnswer
+          .map((ans) => question.choices.findIndex((c) => c === ans))
+          .filter((i) => i >= 0)
+      );
+    } else {
+      setSelectedIndexes([]);
     }
-    return [];
-  });
 
-  const [inputAnswer, setInputAnswer] = useState(() => {
     if (savedAnswer && typeof savedAnswer === 'string') {
-      return savedAnswer;
+      setInputAnswer(savedAnswer);
+      setDroppedOption(savedAnswer);
+    } else {
+      setInputAnswer('');
+      setDroppedOption('');
     }
-    return '';
-  });
 
-  const [droppedOption, setDroppedOption] = useState(() => {
-    if (savedAnswer && typeof savedAnswer === 'string') {
-      return savedAnswer;
-    }
-    return '';
-  });
-
-  const [hasBeenCounted, setHasBeenCounted] = useState(!!savedAnswer);
+    setHasBeenCounted(!!savedAnswer);
+  }, [question, savedAnswer]);
   const [evaluatedCorrect, setEvaluatedCorrect] = useState(null);
 
   const qText = question.questionText ?? question.text ?? '';
@@ -55,10 +58,11 @@ function Question({
 
   // Report answer to parent whenever it changes (for auto-save)
   useEffect(() => {
-    if (isCompleted) return;
-    
+  if (isCompleted) return;
+
+  const timer = setTimeout(() => {
     let currentAnswer = null;
-    
+
     if (isFillBlank) {
       currentAnswer = inputAnswer.trim() || null;
     } else if (isMultipleAnswer) {
@@ -68,11 +72,14 @@ function Question({
     } else if (selectedIndex !== null) {
       currentAnswer = question.choices[selectedIndex] || null;
     }
-    
+
     if (currentAnswer !== null && onAnswer) {
       onAnswer(questionIndex, null, currentAnswer);
     }
-  }, [inputAnswer, selectedIndexes, droppedOption, selectedIndex]);
+  }, isFillBlank ? 999999 : 0); // 300ms delay for typing, instant for button clicks
+
+  return () => clearTimeout(timer);
+  }, [inputAnswer, selectedIndexes, droppedOption, selectedIndex, isCompleted]);
 
   useEffect(() => {
     if (isCompleted) {
@@ -88,7 +95,7 @@ function Question({
           .map((a) => a.trim().toLowerCase());
 
         const selectedTexts = selectedIndexes.map((i) =>
-          question.choices[i]?.trim().toLowerCase()
+          question.choices[i]?.toLowerCase()
         );
 
         isCorrect =

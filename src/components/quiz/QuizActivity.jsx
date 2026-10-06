@@ -82,10 +82,13 @@ function QuizActivity() {
   const handleAnswerResult = (index, isCorrect) => {
     if (typeof index !== 'number') return;
 
-    setResultsByIndex((prev) => ({
-      ...prev,
-      [index]: isCorrect
-    }));
+    setResultsByIndex((prev) => {
+      if (prev[index] === isCorrect) return prev; 
+      return {
+        ...prev,
+        [index]: isCorrect
+      };
+    });
 
     if (typeof isCorrect === 'boolean') {
       recordCorrect(isCorrect);
@@ -214,7 +217,7 @@ function QuizActivity() {
               />
             </div>
             {/* Settings */}
-            <div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
+            {/*<div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
               <h2 className="text-2xl font-semibold mb-6 text-center text-gradient-primary">
                 Quiz Settings
               </h2>
@@ -242,7 +245,7 @@ function QuizActivity() {
               >
                 Help
               </button>
-            </div>
+            </div>*/}
             {/* Progress + Submit */}
             <div className="bg-card rounded-3xl p-8 shadow-xl border border-accent">
               <h2 className="text-2xl font-semibold mb-6 text-center text-gradient-primary">
@@ -347,6 +350,7 @@ function QuizActivity() {
                 data-question-index={i}
               >
                 <Question
+                  key={q.id || q.questionId || i}
                   question={q}
                   questionIndex={i}
                   isCompleted={completed}

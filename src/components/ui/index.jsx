@@ -184,6 +184,13 @@ export const Footer = () => {
               </Link>
 
               <Link
+                to="/instructions"
+                className="text-gray-400 hover:text-purple-400 transition-colors duration-200 hover:underline"
+              >
+                How to Use
+              </Link>
+
+              <Link
                 to="/contact"
                 className="text-gray-400 hover:text-purple-400 transition-colors duration-200 hover:underline"
               >

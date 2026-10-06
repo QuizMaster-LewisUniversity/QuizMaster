@@ -357,6 +357,8 @@ export default function Poll() {
                     onOpen={handleOpenPoll}
                     onToggleLive={handleToggleLiveResults}
                     poll={pollData}
+					votes={votes}
+					totalVotes={totalVotes}
                     joinCode={joinCode}
                     isCreating={isCreating}
                     error={teacherError}
