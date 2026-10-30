@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import andres from "../../assets/andres.webp"
 import neil from "../../assets/neil.webp"
 import coltin from "../../assets/coltin.webp"
 import michael from "../../assets/michael.webp"
@@ -72,10 +73,10 @@ const TeamSection = ({ title, isOpen = false, children }) => {
 const TeamMember = ({ image, name, group, email, githubLink }) => (
     <div className="flex flex-col items-center bg-card border border-primary rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
         <a href={githubLink} target="_blank" rel="noopener noreferrer">
-            <img 
-                src={image} 
-                alt={name} 
-                className="object-cover w-48 h-48 rounded-full border-2 border-accent transition-all duration-300 hover:border-accent-hover" 
+            <img
+                src={image}
+                alt={name}
+                className="object-cover w-48 h-48 rounded-full border-2 border-accent transition-all duration-300 hover:border-accent-hover"
                 loading="lazy"
                 width="192"
                 height="192"
@@ -103,72 +104,90 @@ const Contact = () => (
                 </div>
             </div>
 
+            <TeamSection title="Spring 2027 Team">
+                <div className="w-full -mt-16">
+                    <h2 className="text-gradient-primary text-2xl font-bold text-center mb-6">
+                        Coming Soon...
+                    </h2>
+                    <div className="grid-cols-1 gap-6 flex flex-wrap justify-center">
+                        <TeamMember
+                            image={andres}
+                            name="Andres Bodington"
+                            group="The Overflowers"
+                            email="andreseduardobodin@lewisu.edu"
+                            githubLink="https://github.com/aebodi"
+                        />
+                    </div>
+                </div>
+            </TeamSection>
+
 
             <div className="py-16 mx-auto max-w-7xl sm:px-6 lg:px-8 xl:px-12 2xl:px-24 mt-12">
                 <h2 className="text-gradient-primary text-4xl font-bold text-center mb-12">
                     Fall 2026 Dream Team
                 </h2>
                 <div className="grid-cols-1 gap-6 flex flex-wrap justify-center mt-8">
-					<TeamMember
-						image={michael}
-						name="Michael Analitis"
-						group="TheNullPointers Group"
-						email="michaeltanalitis@lewisu.edu"
-						githubLink="https://github.com/m-analitis"
-					/>
                     <TeamMember
-						image={coltin}
-						name="Coltin Rogge"
-						group="TheNullPointers Group"
-						email="coltinwrogge@lewisu.edu"
-						githubLink="https://github.com/coltin14"
-					/>
+                        image={michael}
+                        name="Michael Analitis"
+                        group="TheNullPointers Group"
+                        email="michaeltanalitis@lewisu.edu"
+                        githubLink="https://github.com/m-analitis"
+                    />
+                    <TeamMember
+                        image={coltin}
+                        name="Coltin Rogge"
+                        group="TheNullPointers Group"
+                        email="coltinwrogge@lewisu.edu"
+                        githubLink="https://github.com/coltin14"
+                    />
                 </div>
             </div>
 
-			<TeamSection title="Spring 2026 Team">
+
+            <TeamSection title="Spring 2026 Team">
                 <TeamMember
-					image={benC}
-					name="Benjamin Campa"
-					group="ElectricalSquirrels Group"
-					email="benjaminacampa@lewisu.edu"
-					githubLink="https://github.com/campabenjamin"
-				/>
-				<TeamMember
-					image={adrian}
-					name="Adrian Salinas"
-					group="ElectricalSquirrels Group"
-					email="adriansalinas@lewisu.edu"
-					githubLink="https://github.com/adrian57831"
-				/>
-				<TeamMember
-					image={faiza}
-					name="Faiza Khan"
-					group="ElectricalSquirrels Group"
-					email="faizaakhan@lewisu.edu"
-					githubLink="https://github.com/faizak2521"
-				/>
-				<TeamMember
-					image={salah}
-					name="Salah Abdelmajid"
-					group="ElectricalSquirrels Group"
-					email="salahjabdelmajid@lewisu.edu"
-					githubLink={"https://github.com/salahmajid"}
-				/>
-				<TeamMember
-					image={joseph}
-					name="Joseph Chavez"
-					group="ElectricalSquirrels Group"
-					email="josephrchavez1@lewisu.edu"
-					githubLink="https://github.com/Jchave2000"
-				/>
-				<TeamMember
-					image={neil}
-					name="Neil Mamparo"
-					group="TheNullPointers Group"
-					email="neilamamparo@lewisu.edu"
-					githubLink="https://github.com/neilmamparo"
-				/>
+                    image={benC}
+                    name="Benjamin Campa"
+                    group="ElectricalSquirrels Group"
+                    email="benjaminacampa@lewisu.edu"
+                    githubLink="https://github.com/campabenjamin"
+                />
+                <TeamMember
+                    image={adrian}
+                    name="Adrian Salinas"
+                    group="ElectricalSquirrels Group"
+                    email="adriansalinas@lewisu.edu"
+                    githubLink="https://github.com/adrian57831"
+                />
+                <TeamMember
+                    image={faiza}
+                    name="Faiza Khan"
+                    group="ElectricalSquirrels Group"
+                    email="faizaakhan@lewisu.edu"
+                    githubLink="https://github.com/faizak2521"
+                />
+                <TeamMember
+                    image={salah}
+                    name="Salah Abdelmajid"
+                    group="ElectricalSquirrels Group"
+                    email="salahjabdelmajid@lewisu.edu"
+                    githubLink={"https://github.com/salahmajid"}
+                />
+                <TeamMember
+                    image={joseph}
+                    name="Joseph Chavez"
+                    group="ElectricalSquirrels Group"
+                    email="josephrchavez1@lewisu.edu"
+                    githubLink="https://github.com/Jchave2000"
+                />
+                <TeamMember
+                    image={neil}
+                    name="Neil Mamparo"
+                    group="TheNullPointers Group"
+                    email="neilamamparo@lewisu.edu"
+                    githubLink="https://github.com/neilmamparo"
+                />
             </TeamSection>
 
             <TeamSection title="Fall 2025 Team">
