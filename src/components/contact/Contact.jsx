@@ -104,6 +104,17 @@ const Contact = () => (
                 </div>
             </div>
 
+            {/* RC-007: List of teams currently responsible for development */}
+            <div className="mx-auto max-w-3xl px-6 text-center">
+                <h2 className="text-gradient-primary text-3xl font-bold mb-4">
+                    Development Teams
+                </h2>
+                <ul className="flex flex-wrap justify-center gap-4 text-lg text-secondary">
+                    <li className="rounded-full border border-accent px-5 py-2">TheNullPointers</li>
+                    <li className="rounded-full border border-accent px-5 py-2">The Overflowers</li>
+                </ul>
+            </div>
+
             <TeamSection title="Spring 2027 Team">
                 <div className="w-full -mt-16">
                     <h2 className="text-gradient-primary text-2xl font-bold text-center mb-6">
