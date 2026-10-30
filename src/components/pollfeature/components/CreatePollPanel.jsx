@@ -1,3 +1,4 @@
+import { getPollPercentages } from "../../../utils/pollPercentages";
 /**
  * ============================================================
  * CreatePollPanel.jsx
@@ -45,6 +46,7 @@ isCreating,
 error,
 onReset,
 }) {
+const votePercents = getPollPercentages(votes);
 const handleOptionChange = (value, idx) => {
 const next = [...options];
 next[idx] = value;
@@ -98,9 +100,7 @@ return (
     <div className="space-y-2">
         {options.map((opt, idx) => {
 		const voteCount = votes[idx] || 0;
-		const votePercent = totalVotes
-            ? Math.round((voteCount / totalVotes) * 100)
-            : 0;
+		const votePercent = votePercents[idx] || 0;
 		return(
 		<div className="mt-4">
 			{poll?.status && (
