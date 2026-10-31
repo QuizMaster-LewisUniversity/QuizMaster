@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import {
   closePoll,
   createPoll,
+  savePoll,
   endPoll,
   findPollByCode,
   getUserVote,
@@ -79,6 +80,7 @@ export default function Poll() {
   const [studentError, setStudentError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [studentJoinCode, setStudentJoinCode] = useState("");
   const [studentSelection, setStudentSelection] = useState([]);
@@ -136,6 +138,45 @@ export default function Poll() {
       setPollData(payload.data);
     });
   };
+
+  const handleSavePoll = async () => {
+	setTeacherError("");
+    setInfoMessage("");
+
+    if (!currentUser?.uid) {
+      setTeacherError("You must be signed in to create a poll.");
+      return;
+    }
+
+	try {
+      const trimmedQuestion = teacherQuestion.trim();
+      const cleanedOptions = teacherOptions.map((opt) => opt.trim()).filter(Boolean);
+
+      if (!trimmedQuestion) {
+        setTeacherError("Please enter a question.");
+        return;
+      }
+      if (cleanedOptions.length < 2 || cleanedOptions.length > 10) {
+        setTeacherError("Enter between 2 and 10 options.");
+        return;
+      }
+
+      setIsSaving(true);
+
+      // NEW: pass createdBy to comply with Firestore rules
+      const { templateId } = await savePoll({
+        question: trimmedQuestion,
+        options: cleanedOptions,
+        createdBy: currentUser.uid,
+      });
+
+      //attachListener(id);
+    } catch (error) {
+      setTeacherError(error.message || "Failed to save poll.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   const handleStartPoll = async () => {
     setTeacherError("");
@@ -354,6 +395,7 @@ export default function Poll() {
                     setQuestion={setTeacherQuestion}
                     setOptions={setTeacherOptions}
                     onStart={handleStartPoll}
+					onSave={handleSavePoll}
                     onClose={handleClosePoll}
                     onOpen={handleOpenPoll}
                     onToggleLive={handleToggleLiveResults}
@@ -362,6 +404,7 @@ export default function Poll() {
 					totalVotes={totalVotes}
                     joinCode={joinCode}
                     isCreating={isCreating}
+					isSaving={isSaving}
                     error={teacherError}
                     onReset={handleEndPollAndReset}
                   />

@@ -35,6 +35,7 @@ options,
 setQuestion,
 setOptions,
 onStart,
+onSave,
 onClose,
 onOpen,
 onToggleLive,
@@ -43,6 +44,7 @@ votes,
 totalVotes,
 joinCode,
 isCreating,
+isSaving,
 error,
 onReset,
 }) {
@@ -167,6 +169,19 @@ return (
         >
         {isCreating ? "Starting..." : "Start poll"}
         </button>
+
+		<button
+		onClick={onSave}
+		disabled={isSaving || !isSignedIn}
+		className={`px-4 py-2 rounded-full font-semibold shadow-md transition ${
+                isSaving || !isSignedIn
+				? "bg-secondary text-secondary border border-primary cursor-not-allowed"
+                : "bg-secondary text-accent border border-primary hover:-translate-y-0.5"
+		}`}
+		title={!isSignedIn ? "Sign in to save a poll" : undefined}
+		>
+		{isSaving ? "Saving..." : "Save poll"}
+		</button>
 
         {isCreator && (
         <>
