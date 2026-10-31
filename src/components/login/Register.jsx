@@ -213,7 +213,7 @@ export default function Register() {
             </Link>
           </p>
         </div>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        {/*<form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="first-name" className="block text-left font-semibold mb-2 text-primary">
@@ -352,9 +352,9 @@ export default function Register() {
               )}
             </button>
           </div>
-        </form>
+        </form> */}
         <div className="mt-8 text-center">
-          <p className="text-sm mb-4 text-secondary">Or continue with</p>
+          {/*<p className="text-sm mb-4 text-secondary">Or continue with</p> */}
           <div className="space-y-3">
             <GoogleButton
               onClick={handleGoogleRegister}

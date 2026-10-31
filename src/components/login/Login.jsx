@@ -77,7 +77,7 @@ export default function Login() {
               </Link>
             </p>
           </div>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          {/*<form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email-address" className="block text-left font-semibold mb-2 text-primary">
                 Email address
@@ -144,9 +144,9 @@ export default function Login() {
                 )}
               </button>
             </div>
-          </form>
+          </form> */}
           <div className="mt-8 text-center">
-            <p className="text-sm mb-4 text-secondary">Or continue with</p>
+            {/*<p className="text-sm mb-4 text-secondary">Or continue with</p> */}
             <div className="space-y-3">
               <GoogleButton
                   onClick={handleGoogleSignIn}
