@@ -135,6 +135,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/instructions" element={<Instructions />} />
               <Route path="/support" element={
                 <PrivateRoute>
                   <Support />
@@ -264,12 +265,6 @@ function App() {
               <Route path="/favorites" element={
                 <PrivateRoute>
                   <FavoritesPage />
-                </PrivateRoute>
-              }/>
-
-              <Route path="/instructions" element={
-                <PrivateRoute>
-                  <Instructions />
                 </PrivateRoute>
               }/>
 
