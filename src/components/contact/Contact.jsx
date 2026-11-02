@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import andres from "../../assets/andres.webp"
+import david from "../../assets/david.webp"
 import neil from "../../assets/neil.webp"
 import coltin from "../../assets/coltin.webp"
 import michael from "../../assets/michael.webp"
@@ -127,6 +128,13 @@ const Contact = () => (
                             group="The Overflowers"
                             email="andreseduardobodin@lewisu.edu"
                             githubLink="https://github.com/aebodi"
+                        />
+                        <TeamMember
+                            image={david}
+                            name="David Woloszczuk-Mrugala"
+                            group="The Overflowers"
+                            email="davidwoloszczukmru@lewisu.edu"
+                            githubLink="https://github.com/davidwoloszczuk"
                         />
                     </div>
                 </div>
