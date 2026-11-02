@@ -134,7 +134,6 @@ const Contact = () => (
                             name="David Woloszczuk-Mrugala"
                             group="The Overflowers"
                             email="davidwoloszczukmru@lewisu.edu"
-                            githubLink="https://github.com/davidwoloszczuk"
                         />
                     </div>
                 </div>
