@@ -1,3 +1,4 @@
+import { getPollPercentages } from "../../../utils/pollPercentages";
 /**
  * ============================================================
  * StudentPanel.jsx
@@ -37,6 +38,7 @@ currentPollId,
 isFetchingVote,
 onReset,
 }) {
+const votePercents = getPollPercentages(votes);
 const pollOpen = poll?.status === "open";
 const pollClosed = poll?.status === "closed";
 const toggleOption = (index) => {
@@ -116,9 +118,7 @@ return (
         {options.map((opt, idx) => {
             const isSelected = selected.includes(idx);
             const voteCount = votes[idx] || 0;
-            const votePercent = totalVotes
-            ? Math.round((voteCount / totalVotes) * 100)
-            : 0;
+            const votePercent = votePercents[idx] || 0;
             const disabled =
             hasSubmitted || !pollOpen || !currentPollId || !opt;
             return (

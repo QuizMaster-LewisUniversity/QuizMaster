@@ -35,8 +35,10 @@ import { db, handleFirebaseError } from "../firebase/firebaseService";
 import { sanitizeProfanity, validateNoProfanity } from "../../utils/profanityFilter";
 
 const POLLS_COLLECTION = "polls";
+const POLL_TEMPLATES_COLLECTION = "poll_templates"
 
 const pollsRef = collection(db, POLLS_COLLECTION);
+const pollTemplatesRef = collection(db, POLL_TEMPLATES_COLLECTION);
 
 const generateJoinCode = () => {
   // 6-digit, padded, string
@@ -53,6 +55,45 @@ async function ensureUniqueJoinCode() {
     attempts += 1;
   }
   throw new Error("Could not generate a unique join code. Please try again.");
+}
+
+export async function savePoll({ question, options, createdBy }) {
+	try {
+		if (!createdBy) throw new Error("You must be signed in to create a poll.");
+		if (!Array.isArray(options) || options.length < 2 || options.length > 10) {
+			throw new Error("Poll options must be an array with 2 to 10 choices.");
+		}
+
+		const profanityValidation = validateNoProfanity([
+			{
+				label: "Poll question",
+				value: question,
+				message: "Poll question cannot include profanity.",
+			},
+				...options.map((option, index) => ({
+				label: `Poll option ${index + 1}`,
+				value: option,
+				message: `Poll option ${index + 1} cannot include profanity.`,
+			})),
+		]);
+
+		if (!profanityValidation.valid) {
+			throw new Error(profanityValidation.error);
+		}
+		
+		const docRef = await addDoc(pollTemplatesRef, {
+			createdBy,
+			createdAt: serverTimestamp(),
+			updatedAt: serverTimestamp(),
+			question,
+			options
+    	});
+
+		return { id: docRef.id }
+		
+	} catch (error) {
+		throw handleFirebaseError(error);
+	}
 }
 
 export async function createPoll({ question, options, createdBy }) {

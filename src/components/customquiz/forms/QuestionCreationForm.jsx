@@ -105,6 +105,17 @@ export default function QuestionCreationForm({
                     className="flex-1 bg-card text-primary border border-primary rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
                     placeholder={`Option ${idx}`}
                   />
+				  {currentQuestion[6] === QUESTION_TYPES.MULTIPLE_CHOICE && (
+					<div className="flex items-center">
+						<input
+							type="radio"
+							value={currentQuestion[idx]}
+							onChange={(e) => onQuestionChange(e.target.value, 5)}
+							className="w-5 h-5 text-accent bg-card border-primary focus:ring-accent"
+							name="correctAnswer"
+						/>
+					</div>	
+				  )}
                   {currentQuestion[6] === QUESTION_TYPES.MULTIPLE_ANSWER && (
                     <div className="flex items-center">
                       <input
@@ -197,34 +208,6 @@ export default function QuestionCreationForm({
               />
               <span className="text-lg">False</span>
             </label>
-          </div>
-        </div>
-      )}
-
-      {/* Correct Answer Selection (Multiple Choice) */}
-      {currentQuestion[6] === QUESTION_TYPES.MULTIPLE_CHOICE && (
-        <div className="bg-card border border-primary rounded-xl p-6 md:p-8 shadow-lg">
-          <h2 className="text-xl md:text-2xl font-semibold text-primary mb-4 md:mb-6">
-            ✅ Correct Answer
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-            <label className="text-secondary font-medium md:text-right">
-              Select correct option:
-            </label>
-            <div className="md:col-span-3">
-              <select
-                value={currentQuestion[5]}
-                onChange={(e) => onQuestionChange(e.target.value, 5)}
-                className="w-full bg-card text-primary border border-primary rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
-              >
-                <option value="">Select correct answer</option>
-                {[1, 2, 3, 4].slice(0, numAnswers).map((idx) => (
-                  <option key={idx} value={currentQuestion[idx]}>
-                    {currentQuestion[idx] || `Option ${idx}`}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
         </div>
       )}
