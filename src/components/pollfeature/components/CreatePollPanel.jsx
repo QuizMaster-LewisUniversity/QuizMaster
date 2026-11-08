@@ -114,16 +114,15 @@ return (
         className="w-full px-4 py-3 rounded-xl border border-input bg-input text-primary placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-accent"
     />
 
-    <div className="space-y-2">
+    <div className="h-1 w-full rounded-full bg-[var(--accent)]" />
+
+    <div className={poll?.status ? "space-y-7" : "space-y-3"}>
         {options.map((opt, idx) => {
 		const voteCount = votes[idx] || 0;
 		const votePercent = votePercents[idx] || 0;
 		return(
-		<div className="mt-4">
-			{poll?.status && (
-				<hr className="mt-4 mb-4 border border-input" />
-			)}
-			<div key={idx} className="flex items-center gap-2">
+		<div key={idx}>
+			<div className="flex items-center gap-2">
 				<input
 				value={opt}
 				onChange={(e) => handleOptionChange(e.target.value, idx)}
@@ -140,7 +139,7 @@ return (
 				)}
 			</div>
 			{poll?.status && (
-			<div className="mt-4">
+			<div className="mt-2">
 				<div className="mb-2 flex items-center justify-between gap-3 text-sm font-semibold">
 				<span className="text-secondary">
 					{voteCount} vote{voteCount === 1 ? "" : "s"}
