@@ -78,7 +78,7 @@ export const INSTRUCTION_SECTIONS = [
     intro: 'Teachers can run live polls to get real-time feedback from a class.',
     steps: [
       'Choose Take a Poll in the sidebar.',
-      'To create a poll, enter a question and answer options. You get a join code to share with your students.',
+      'To create a poll, enter a question and answer options. You get a join code to share with your students, plus a Copy link button for a link that opens the poll directly.',
       'To join a poll, enter the join code you were given and cast your vote. You can vote once per poll, and you do not need an account.',
       'The poll creator can open or close the poll and choose whether students see live results.',
     ],

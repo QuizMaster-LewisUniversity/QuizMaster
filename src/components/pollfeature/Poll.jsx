@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { getPollCodeFromSearch } from "../../utils/pollShareLink";
 import {
   closePoll,
   createPoll,
@@ -68,7 +70,10 @@ const defaultQuestion = "";
 const defaultOptions = ["", "", "", ""];
 
 export default function Poll() {
-  const { currentUser } = useAuth();
+  const { currentUser, loading: authLoading } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sharedCode = getPollCodeFromSearch(searchParams.toString());
+  const autoJoinedCodeRef = useRef(null);
 
   const [pollMode, setPollMode] = useState(null);
   const [teacherQuestion, setTeacherQuestion] = useState(defaultQuestion);
@@ -224,11 +229,11 @@ export default function Poll() {
     }
   };
 
-  const handleJoinPoll = async () => {
+  const joinPollWithCode = async (rawCode) => {
     setStudentError("");
     setInfoMessage("");
     try {
-      const code = studentJoinCode.trim();
+      const code = String(rawCode || "").trim();
       if (!code) {
         setStudentError("Enter a join code.");
         return;
@@ -263,6 +268,20 @@ export default function Poll() {
       setIsJoining(false);
     }
   };
+
+  const handleJoinPoll = () => joinPollWithCode(studentJoinCode);
+
+  // Shareable links: /poll?code=482193 opens the Take panel and joins automatically.
+  // Wait for auth so getUserVote can detect an existing vote for signed-in users.
+  useEffect(() => {
+    if (!sharedCode || authLoading) return;
+    if (autoJoinedCodeRef.current === sharedCode) return;
+    autoJoinedCodeRef.current = sharedCode;
+    setPollMode("take");
+    setStudentJoinCode(sharedCode);
+    joinPollWithCode(sharedCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sharedCode, authLoading]);
 
   const handleSubmitVote = async () => {
     if (!currentPollId || studentSelection.length === 0) return;
@@ -324,6 +343,9 @@ export default function Poll() {
     setTeacherOptions(defaultOptions);
     setPollMode(null);
     resetSubscription();
+    // Drop ?code= so a refresh doesn't re-join the poll the user just left.
+    if (searchParams.has("code")) setSearchParams({}, { replace: true });
+    autoJoinedCodeRef.current = null;
   };
 
   const handleReset = () => {
