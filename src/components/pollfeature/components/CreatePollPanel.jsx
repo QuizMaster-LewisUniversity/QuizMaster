@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { getPollPercentages } from "../../../utils/pollPercentages";
+import { buildPollShareUrl } from "../../../utils/pollShareLink";
 /**
  * ============================================================
  * CreatePollPanel.jsx
@@ -49,6 +51,19 @@ error,
 onReset,
 }) {
 const votePercents = getPollPercentages(votes);
+const [linkCopied, setLinkCopied] = useState(false);
+const shareUrl = joinCode ? buildPollShareUrl(joinCode) : "";
+
+const copyShareLink = async () => {
+try {
+    await navigator.clipboard.writeText(shareUrl);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+} catch {
+    // Clipboard unavailable (e.g. insecure context); the link text stays selectable.
+}
+};
+
 const handleOptionChange = (value, idx) => {
 const next = [...options];
 next[idx] = value;
@@ -99,16 +114,15 @@ return (
         className="w-full px-4 py-3 rounded-xl border border-input bg-input text-primary placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-accent"
     />
 
-    <div className="space-y-2">
+    <div className="h-1 w-full rounded-full bg-[var(--accent)]" />
+
+    <div className={poll?.status ? "space-y-7" : "space-y-3"}>
         {options.map((opt, idx) => {
 		const voteCount = votes[idx] || 0;
 		const votePercent = votePercents[idx] || 0;
 		return(
-		<div className="mt-4">
-			{poll?.status && (
-				<hr className="mt-4 mb-4 border border-input" />
-			)}
-			<div key={idx} className="flex items-center gap-2">
+		<div key={idx}>
+			<div className="flex items-center gap-2">
 				<input
 				value={opt}
 				onChange={(e) => handleOptionChange(e.target.value, idx)}
@@ -125,7 +139,7 @@ return (
 				)}
 			</div>
 			{poll?.status && (
-			<div className="mt-4">
+			<div className="mt-2">
 				<div className="mb-2 flex items-center justify-between gap-3 text-sm font-semibold">
 				<span className="text-secondary">
 					{voteCount} vote{voteCount === 1 ? "" : "s"}
@@ -235,9 +249,21 @@ return (
 
     {isCreator && joinCode && poll?.status === "open" && (
         <div className="mt-3 text-center">
-        <p className="text-sm text-secondary mb-2">Share this code:</p>
+        <p className="text-sm text-secondary mb-2">Share this code or link:</p>
         <div className="text-3xl font-extrabold text-gradient-primary tracking-widest">
             {joinCode}
+        </div>
+        <div className="mt-3 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center">
+            <span className="min-w-0 break-all select-all rounded-xl border border-input bg-input px-3 py-2 text-sm text-primary">
+            {shareUrl}
+            </span>
+            <button
+            type="button"
+            onClick={copyShareLink}
+            className="shrink-0 rounded-full border border-primary bg-secondary px-4 py-2 text-sm font-semibold text-accent transition hover:-translate-y-0.5"
+            >
+            {linkCopied ? "Copied!" : "Copy link"}
+            </button>
         </div>
         </div>
     )}
