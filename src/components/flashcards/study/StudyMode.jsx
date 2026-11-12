@@ -135,6 +135,8 @@ const StudyMode = () => {
                 return;
             }
 
+
+
             setDifficultPtr(nextPtr);
             setCurrentCardIndex(difficultIndices[nextPtr]);
             return;
@@ -152,12 +154,16 @@ const StudyMode = () => {
     };
 
     const handleNextClick = () => {
+        if (isFlipped) handleFlip();
+
         if (currentCardIndex < cards.length - 1) {
             setCurrentCardIndex(currentCardIndex + 1);
         }
     };
 
     const handlePrevClick = () => {
+        if (isFlipped) handleFlip();
+
         if (currentCardIndex > 0) {
             setCurrentCardIndex(currentCardIndex - 1);
         }
