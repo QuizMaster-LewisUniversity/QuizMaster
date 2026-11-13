@@ -64,6 +64,57 @@ const StudyMode = () => {
     // Visual feedback for the shuffle button
     const [isShuffling, setIsShuffling] = useState(false);
 
+    // Quiz Study Mode
+    const [mode, setMode] = useState('study');
+    const [quizQuestions, setQuizQuestions] = useState([]);
+    const [quizIndex, setQuizIndex] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [quizScore, setQuizScore] = useState(0);
+    const [isQuizFinished, setIsQuizFinished] = useState(false);
+
+    const startQuizMode = () => {
+        const cardsList = Array.isArray(cards) ? cards : Object.values(cards || {});
+
+        if (cardsList.length === 0) {
+            console.warn("No cards available to start quiz mode.");
+            return;
+        }
+
+        clearSearch();
+
+        const questions = cardsList.map((card, index) => {
+            const otherCards = cardsList.filter((_, i) => i !== index);
+            const shuffledOthers = [...otherCards].sort(() => 0.5 - Math.random());
+            const distractors = shuffledOthers.slice(0, 3).map((c) => c.back);
+            const options = [...distractors, card.back].sort(() => 0.5 - Math.random());
+
+            return {
+                question: card.front,
+                correctAnswer: card.back,
+                options: options,
+            };
+        });
+
+        setQuizQuestions(questions);
+        setQuizIndex(0);
+        setQuizScore(0);
+        setSelectedOption(null);
+        setIsQuizFinished(false);
+        setMode('quiz');
+    };
+
+    const handleQuizNext = () => {
+        const currentQuestion = quizQuestions[quizIndex];
+        if (selectedOption === currentQuestion.correctAnswer) {
+            setQuizScore((prevScore) => prevScore + 1);
+        }
+        if (quizIndex < quizQuestions.length - 1) {
+            setQuizIndex((prevIndex) => prevIndex + 1);
+            setSelectedOption(null);
+        } else {
+            setIsQuizFinished(true);
+        }
+    };
     // Derive difficult cards from ratings — always in sync with whatever
     // is in localRatings, including restored ratings from a resumed session.
     const difficultCardIds = useMemo(() => {
@@ -270,10 +321,28 @@ const StudyMode = () => {
                 <div className="flex justify-between items-center">
                     <h1 className="text-3xl font-bold text-gradient-primary">{deck.title}</h1>
                     <div className="flex items-center gap-3">
+                        {/* Toggle Quiz / Study Mode */}
+                        {mode === 'study' ? (
+                            <button
+                                className="px-4 py-2 bg-[var(--success)] text-white rounded-lg font-semibold shadow-md transition hover:opacity-90"
+                                onClick={startQuizMode}
+                                disabled={cards.length === 0}
+                            >
+                                Take Quiz
+                            </button>
+                        ) : (
+                            <button
+                                className="px-4 py-2 bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all duration-200"
+                                onClick={() => setMode('study')}
+                            >
+                                🔙 Back to Flashcards
+                            </button>
+                        )}
+
                         <button
                             className="px-4 py-2 bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             onClick={handleShuffleClick}
-                            disabled={isShuffling || isReviewingDifficult || cards.length <= 1}
+                            disabled={isShuffling || isReviewingDifficult || cards.length <= 1 || mode === 'quiz'}
                             aria-label="Shuffle cards"
                             title={isReviewingDifficult ? 'Cannot shuffle during review' : 'Shuffle remaining cards'}
                         >
@@ -288,6 +357,67 @@ const StudyMode = () => {
                         </button>
                     </div>
                 </div>
+
+                {/* QUIZ MODE VIEW */}
+                {mode === 'quiz' && !isQuizFinished && quizQuestions.length > 0 && (
+                    <div className="card p-8 space-y-6 max-w-2xl mx-auto border-2 border-accent">
+                        <div className="text-sm font-medium text-secondary">
+                            Question {quizIndex + 1} of {quizQuestions.length}
+                        </div>
+
+                        <h3 className="text-2xl font-bold text-primary text-center">
+                            {quizQuestions[quizIndex].question}
+                        </h3>
+
+                        <div className="space-y-3">
+                            {quizQuestions[quizIndex].options.map((option, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSelectedOption(option)}
+                                    className={`w-full text-left p-4 rounded-lg border-2 transition ${
+                                        selectedOption === option
+                                            ? 'border-[var(--accent)] bg-[var(--accent)]/10 font-semibold'
+                                            : 'border-[var(--border)] bg-[var(--bg-secondary)] hover:border-[var(--accent)]'
+                                    }`}
+                                >
+                                    {option}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={handleQuizNext}
+                            disabled={!selectedOption}
+                            className="w-full py-3 bg-[var(--primary-400)] text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition disabled:opacity-50"
+                        >
+                            {quizIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                        </button>
+                    </div>
+                )}
+
+                {/* QUIZ RESULTS VIEW */}
+                {mode === 'quiz' && isQuizFinished && (
+                    <div className="card p-8 text-center space-y-6 max-w-2xl mx-auto border-2 border-accent">
+                        <h2 className="text-3xl font-bold text-gradient-primary">Quiz Complete! 🎉</h2>
+                        <p className="text-lg text-secondary">
+                            Your Score: <span className="font-bold text-[var(--accent)]">{quizScore}</span> / {quizQuestions.length} ({Math.round((quizScore / quizQuestions.length) * 100)}%)
+                        </p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={startQuizMode}
+                                className="btn btn-primary px-6 py-3"
+                            >
+                                Try Again
+                            </button>
+                            <button
+                                onClick={() => setMode('study')}
+                                className="btn btn-secondary px-6 py-3"
+                            >
+                                Return to Flashcards
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Search Bar with Preview Mode Indicator */}
                 <StudySearchBar
