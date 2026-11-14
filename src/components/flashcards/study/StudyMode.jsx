@@ -38,7 +38,8 @@ const StudyMode = () => {
         handleFlip,
         handleRating,
         saveSession,
-        shuffleCards
+        shuffleCards,
+        canShuffle
     } = useStudySession(deckId, currentUser?.uid);
 
     // Search and preview mode logic
@@ -151,7 +152,7 @@ const StudyMode = () => {
     };
 
     const handleShuffleClick = async () => {
-        if (isReviewingDifficult) return;
+        if (isReviewingDifficult || !canShuffle) return;
 
         clearSearch();
 
@@ -342,9 +343,15 @@ const StudyMode = () => {
                         <button
                             className="px-4 py-2 bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             onClick={handleShuffleClick}
-                            disabled={isShuffling || isReviewingDifficult || cards.length <= 1 || mode === 'quiz'}
+                            disabled={isShuffling || isReviewingDifficult || !canShuffle || mode === 'quiz'}
                             aria-label="Shuffle cards"
-                            title={isReviewingDifficult ? 'Cannot shuffle during review' : 'Shuffle remaining cards'}
+                            title={
+                                isReviewingDifficult
+                                    ? 'Cannot shuffle during review'
+                                    : !canShuffle
+                                        ? 'Not enough cards left to shuffle'
+                                        : 'Shuffle remaining cards'
+                            }
                         >
                             {isShuffling ? 'Shuffling...' : '🔀 Shuffle'}
                         </button>
