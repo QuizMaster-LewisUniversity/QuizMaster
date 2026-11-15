@@ -13,41 +13,41 @@ export function shuffle(array) {
 }
 
 /**
- * Shuffles only the items that come after currentIndex.
- * Items at or before currentIndex stay where they are, so the card the user
- * is on (and the cards they already went through) don't move.
+ * Shuffles the item at currentIndex and everything after it.
+ * Items before currentIndex (cards the user already went through) stay
+ * where they are, so Next/Previous never repeats or skips a card.
  *
- * If there are at least 2 different upcoming items, the new order is always
- * different from the old one. Fisher-Yates can return the same order by
- * chance (50% of the time with 2 cards), which made the button look broken.
+ * The item at currentIndex is always swapped for a different one, so the
+ * user can see that the shuffle worked. Plain Fisher-Yates can leave it
+ * in place by chance, which made the button look like it did nothing.
  *
  * @param {Array} array - The full list (for flashcards, the card ID order)
  * @param {number} currentIndex - Index of the item the user is currently on
  * @returns {Array} A new array (original array is not modified)
  */
-export function shuffleUpcoming(array, currentIndex) {
-  const splitAt = Math.max(0, currentIndex + 1);
+export function shuffleRemaining(array, currentIndex) {
+  const splitAt = Math.max(0, currentIndex);
   const done = array.slice(0, splitAt);
-  const upcoming = array.slice(splitAt);
+  const remaining = array.slice(splitAt);
 
-  if (new Set(upcoming).size < 2) return [...array];
+  if (new Set(remaining).size < 2) return [...array];
 
-  let shuffled = shuffle(upcoming);
-  while (shuffled.every((item, i) => item === upcoming[i])) {
-    shuffled = shuffle(upcoming);
+  let shuffled = shuffle(remaining);
+  while (shuffled[0] === remaining[0]) {
+    shuffled = shuffle(remaining);
   }
 
   return [...done, ...shuffled];
 }
 
 /**
- * How many items are left after currentIndex. Shuffling needs at least 2.
+ * How many items are left, counting the current one. Shuffling needs at least 2.
  * @param {Array} array
  * @param {number} currentIndex
  * @returns {number}
  */
-export function countUpcoming(array, currentIndex) {
-  return Math.max(0, array.length - (currentIndex + 1));
+export function countRemaining(array, currentIndex) {
+  return Math.max(0, array.length - Math.max(0, currentIndex));
 }
 
 export default shuffle;
