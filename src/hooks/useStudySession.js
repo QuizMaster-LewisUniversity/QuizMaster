@@ -6,7 +6,7 @@ import {
     updateLastActivity
 } from '../services/flashcards/studySession';
 import flashcardService from '../services/flashcards/flashcardService';
-import { shuffle } from '../utils/shuffle';
+import { shuffleRemaining, countRemaining } from '../utils/shuffle';
 
 /**
  * useStudySession - Custom hook for managing study session state
@@ -21,7 +21,10 @@ import { shuffle } from '../utils/shuffle';
  * Shuffle behavior:
  * - The study order is driven by `cardOrder` (an array of card IDs).
  * - On a fresh session, cardOrder = the deck's natural order.
- * - shuffleCards() pins the current card at its current index and shuffles the rest.
+ * - shuffleCards() shuffles the current card and the cards after it, and always
+ *   puts a different card on screen. Cards before the current one stay in
+ *   place, so you don't see a card twice or skip one with Next/Previous.
+ * - canShuffle is false on the last card (nothing left to shuffle with).
  * - cardOrder is always persisted to Firestore, so leaving and coming back
  *   resumes the same shuffled order.
  * - If the deck was edited (cards added/removed) since the order was saved,
@@ -195,22 +198,15 @@ export const useStudySession = (deckId, userId) => {
     );
 
     /**
-     * Shuffle the remaining cards. Pins the currently displayed card at its
-     * current index so the user isn't yanked to a different card mid-session.
-     * Persists the new order to Firestore immediately.
+     * Shuffle the remaining cards (the current card and the ones after it).
+     * A different card shows up right away, and the cards already studied
+     * keep their spot. Persists the new order to Firestore immediately.
      */
     const shuffleCards = useCallback(async () => {
         const order = cardOrderRef.current;
-        if (!order || order.length <= 1) return;
+        if (!order || countRemaining(order, currentCardIndex) < 2) return;
 
-        const pinnedId = order[currentCardIndex];
-        const rest = order.filter((_, i) => i !== currentCardIndex);
-        const shuffledRest = shuffle(rest);
-
-        // Reinsert the pinned card at its original position so currentCardIndex
-        // still points at the same card the user is looking at.
-        const newOrder = [...shuffledRest];
-        newOrder.splice(currentCardIndex, 0, pinnedId);
+        const newOrder = shuffleRemaining(order, currentCardIndex);
 
         setCardOrder(newOrder);
 
@@ -353,6 +349,7 @@ export const useStudySession = (deckId, userId) => {
 
     const cards = getCardsArray();
     const currentCard = cards[currentCardIndex];
+    const canShuffle = countRemaining(cards, currentCardIndex) >= 2;
 
     const currentStats = {
         knowCount: localRatings.filter(r => r.rating === 'know').length,
@@ -394,6 +391,7 @@ export const useStudySession = (deckId, userId) => {
         handleFlip,
         handleRating,
         saveSession,
-        shuffleCards
+        shuffleCards,
+        canShuffle
     };
 };
