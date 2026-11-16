@@ -54,6 +54,7 @@ import useProfileSectionData from './hooks/useProfileSectionData';
 import Presentation from './components/presentation/presentation';
 import Classroom from './pages/Classroom';
 import Poll from './components/pollfeature/Poll.jsx';
+import MyPoll from './components/pollfeature/mypolls/MyPoll.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
@@ -261,6 +262,12 @@ function App() {
                   <MyQuiz title="My Quizzes" dataSource="browseCustomQuizzes" showRefreshButton={true} />
                 </PrivateRoute>
               }/>
+
+			  <Route path="/mypolls" element={
+				<PrivateRoute>
+					<MyPoll title="My Polls" dataSource="browsePolls" showRefreshButton={true}/>
+				</PrivateRoute>
+			  }/>
 
               <Route path="/favorites" element={
                 <PrivateRoute>

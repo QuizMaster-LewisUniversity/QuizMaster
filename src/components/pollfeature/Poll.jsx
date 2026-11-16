@@ -8,6 +8,7 @@ import {
   savePoll,
   endPoll,
   findPollByCode,
+  findPollTemplateById,
   getUserVote,
   openPoll,
   setShowLiveResults,
@@ -81,6 +82,7 @@ export default function Poll() {
   const [currentPollId, setCurrentPollId] = useState(null);
   const [joinCode, setJoinCode] = useState("");
   const [pollData, setPollData] = useState(null);
+  const [loadData, setLoadData] = useState(null);
   const [teacherError, setTeacherError] = useState("");
   const [studentError, setStudentError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
@@ -114,6 +116,20 @@ export default function Poll() {
       if (unsubscribeRef.current) unsubscribeRef.current();
     };
   }, []);
+
+  useEffect(() => {
+	async function checkIfLoaded() {
+		if (searchParams.has("load")) {
+			setPollMode("create");
+			const loadId = searchParams.get("load")
+			const loaded = await findPollTemplateById(loadId);
+			setTeacherQuestion(loaded.question);
+			setTeacherOptions(loaded.options);
+			//setSearchParams({}, { replace: true });
+		}
+	}
+	checkIfLoaded();
+  }, [searchParams])
 
   // REFACTOR (optional): move the subscription logic below into a custom hook
   // e.g. usePollSubscription(pollId, setPollData, setStudentError)
@@ -342,9 +358,10 @@ export default function Poll() {
     setTeacherQuestion(defaultQuestion);
     setTeacherOptions(defaultOptions);
     setPollMode(null);
+	setLoadData(null);
     resetSubscription();
     // Drop ?code= so a refresh doesn't re-join the poll the user just left.
-    if (searchParams.has("code")) setSearchParams({}, { replace: true });
+    if (searchParams.has("code")||searchParams.has("load")) setSearchParams({}, { replace: true });
     autoJoinedCodeRef.current = null;
   };
 
