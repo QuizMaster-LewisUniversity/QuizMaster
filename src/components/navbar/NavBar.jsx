@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaBars, FaListAlt, FaEdit, FaUsers, FaPoll} from "react-icons/fa";
+import { FaBars, FaListAlt, FaEdit, FaUsers, FaPoll, FaPollH} from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { School, Computer, Profile, SignIn, Q, Scroll, Book } from "../icons/index.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import '../../styles/nav.css';
 const authenticatedSidebarLinks = [
     { label: "Dashboard", path: "/dashboard", icon: Profile },
     { label: "Take a Poll", path: "/poll", icon: FaPoll, dividerBefore: true},
+	{ label: "My Polls", path: "/mypolls", icon: FaPollH },
     { label: "Take Quizzes", path: "/allcustomquizzes", icon: FaUsers, dividerBefore: true },
     { label: "My Quizzes", path: "/myquizzes", icon: FaListAlt },
     { label: "My Favorite Quizzes", path: "/favorites", icon: FaHeart },

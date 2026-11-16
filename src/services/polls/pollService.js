@@ -21,6 +21,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -162,6 +163,48 @@ export async function findPollByCode(joinCode) {
   } catch (error) {
     throw handleFirebaseError(error);
   }
+}
+
+export async function findPollTemplateById(uid) {
+	try {
+		const snapshot = await getDoc(doc(pollTemplatesRef, uid));
+		if (snapshot.empty) return null;
+
+		const pollData = snapshot.data()
+
+		return pollData;
+	} catch (error) {
+		throw handleFirebaseError(error);
+	}
+}
+
+export async function getPollTemplatesByUser(userId) {
+	try {
+		const snapshot = await getDocs(query(pollTemplatesRef, where("createdBy", "==", userId)))
+		if (snapshot.empty) return null;
+		
+		const foundPolls = [];
+		for (const pollDoc of snapshot.docs) {
+			foundPolls.push({id: pollDoc.id, data: pollDoc.data()});
+		}
+
+		return foundPolls.sort((a,b) => {
+			const dateA = new Date(a.data.createdAt || 0);
+        	const dateB = new Date(b.data.createdAt || 0);
+        	return dateB.getTime() - dateA.getTime();
+		});
+
+	} catch (error) {
+		throw handleFirebaseError(error);
+	}
+}
+
+export async function deletePollTemplate(uid) {
+	try { 
+		await deleteDoc(doc(pollTemplatesRef, uid));
+	} catch (error) {
+		throw handleFirebaseError(error);
+	}
 }
 
 export function subscribeToPoll(pollId, callback) {

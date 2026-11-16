@@ -73,18 +73,28 @@ const TeamSection = ({ title, isOpen = false, children }) => {
 
 
 
+// Not every member has a GitHub/portfolio link, so the photo is only
+// wrapped in a link when there is one to go to.
+const MemberPhoto = ({ image, name }) => (
+    <img
+        src={image}
+        alt={name}
+        className="object-cover w-48 h-48 rounded-full border-2 border-accent transition-all duration-300 hover:border-accent-hover"
+        loading="lazy"
+        width="192"
+        height="192"
+    />
+);
+
 const TeamMember = ({ image, name, group, email, githubLink }) => (
     <div className="flex flex-col items-center bg-card border border-primary rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-        <a href={githubLink} target="_blank" rel="noopener noreferrer">
-            <img
-                src={image}
-                alt={name}
-                className="object-cover w-48 h-48 rounded-full border-2 border-accent transition-all duration-300 hover:border-accent-hover"
-                loading="lazy"
-                width="192"
-                height="192"
-            />
-        </a>
+        {githubLink ? (
+            <a href={githubLink} target="_blank" rel="noopener noreferrer">
+                <MemberPhoto image={image} name={name} />
+            </a>
+        ) : (
+            <MemberPhoto image={image} name={name} />
+        )}
         <h3 className="mt-4 text-lg font-medium text-primary">{name}</h3>
         <div className="mt-1 text-accent font-medium">{group}</div>
         <div className="mt-2 text-sm text-secondary">
@@ -118,42 +128,6 @@ const Contact = () => (
                 </ul>
             </div>
 
-            <TeamSection title="Spring 2027 Team">
-                <div className="w-full -mt-16">
-                    <h2 className="text-gradient-primary text-2xl font-bold text-center mb-6">
-                        Coming Soon...
-                    </h2>
-                    <div className="grid-cols-1 gap-6 flex flex-wrap justify-center">
-                        <TeamMember
-                            image={andres}
-                            name="Andres Bodington"
-                            group="The Overflowers"
-                            email="andreseduardobodin@lewisu.edu"
-                            githubLink="https://github.com/aebodi"
-                        />
-                        <TeamMember
-                            image={david}
-                            name="David Woloszczuk-Mrugala"
-                            group="The Overflowers"
-                            email="davidwoloszczukmru@lewisu.edu"
-                        />
-                        <TeamMember
-                            image={ianJ}
-                            name="Ian Jung"
-                            group="The Overflowers"
-                            email="iancjung@lewisu.edu"
-                        />
-                        <TeamMember
-                            image={abdul}
-                            name="Abdul Rahman"
-                            group="The Overflowers"
-                            email="abdulrahman1@lewisu.edu"
-                        />
-                    </div>
-                </div>
-            </TeamSection>
-
-
             <div className="py-16 mx-auto max-w-7xl sm:px-6 lg:px-8 xl:px-12 2xl:px-24 mt-12">
                 <h2 className="text-gradient-primary text-4xl font-bold text-center mb-12">
                     Fall 2026 Dream Team
@@ -172,6 +146,32 @@ const Contact = () => (
                         group="TheNullPointers Group"
                         email="coltinwrogge@lewisu.edu"
                         githubLink="https://github.com/coltin14"
+                    />
+                    <TeamMember
+                        image={andres}
+                        name="Andres Bodington"
+                        group="The Overflowers"
+                        email="andreseduardobodin@lewisu.edu"
+                        githubLink="https://github.com/aebodi"
+                    />
+                    <TeamMember
+                        image={david}
+                        name="David Woloszczuk-Mrugala"
+                        group="The Overflowers"
+                        email="davidwoloszczukmru@lewisu.edu"
+                        githubLink="https://github.com/davidwoloszczuk"
+                    />
+                    <TeamMember
+                        image={ianJ}
+                        name="Ian Jung"
+                        group="The Overflowers"
+                        email="iancjung@lewisu.edu"
+                    />
+                    <TeamMember
+                        image={abdul}
+                        name="Abdul Rahman"
+                        group="The Overflowers"
+                        email="abdulrahman1@lewisu.edu"
                     />
                 </div>
             </div>
