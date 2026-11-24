@@ -189,8 +189,8 @@ export async function getPollTemplatesByUser(userId) {
 		}
 
 		return foundPolls.sort((a,b) => {
-			const dateA = new Date(a.data.createdAt || 0);
-        	const dateB = new Date(b.data.createdAt || 0);
+			const dateA = a.data.createdAt.toDate();
+        	const dateB = b.data.createdAt.toDate();
         	return dateB.getTime() - dateA.getTime();
 		});
 
